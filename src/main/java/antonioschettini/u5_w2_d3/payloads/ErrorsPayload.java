@@ -6,10 +6,12 @@ import java.time.LocalDateTime;
 
 @Data
 public class ErrorsPayload {
+    private int status;
     private String messaggio;
     private LocalDateTime dataOra;
 
-    public ErrorsPayload(String messaggio, LocalDateTime dataOra) {
+    public ErrorsPayload(String messaggio, LocalDateTime dataOra, int status) {
+        this.status = status;
         this.messaggio = messaggio;
         this.dataOra = dataOra;
     }
