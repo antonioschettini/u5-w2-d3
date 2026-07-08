@@ -1,12 +1,11 @@
-package antonioschettini.u5_w2_d2.controllers;
+package antonioschettini.u5_w2_d3.controllers;
 
-import antonioschettini.u5_w2_d2.entities.BlogPost;
-import antonioschettini.u5_w2_d2.payloads.NewBlogPostPayload;
-import antonioschettini.u5_w2_d2.services.BlogPostService;
+import antonioschettini.u5_w2_d3.entities.BlogPost;
+import antonioschettini.u5_w2_d3.payloads.NewBlogPostPayload;
+import antonioschettini.u5_w2_d3.services.BlogPostService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/blogPosts") // setto l'indirizzo di base per tutti
@@ -27,8 +26,12 @@ public class BlogPostController {
 
     //endpoint getall
     @GetMapping
-    public List<BlogPost> prendiTuttiIPost() {
-        return this.blogPostService.trovaTutti();
+    public Page<BlogPost> prendiTuttiIPost(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+        return this.blogPostService.trovaTutti(page, size, sortBy);
     }
 
     //ednpoint getone

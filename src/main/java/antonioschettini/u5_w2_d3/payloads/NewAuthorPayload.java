@@ -1,4 +1,4 @@
-package antonioschettini.u5_w2_d2.payloads;
+package antonioschettini.u5_w2_d3.payloads;
 
 import lombok.Data;
 

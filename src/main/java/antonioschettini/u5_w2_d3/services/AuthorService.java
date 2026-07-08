@@ -1,17 +1,22 @@
-package antonioschettini.u5_w2_d2.services;
+package antonioschettini.u5_w2_d3.services;
 
-import antonioschettini.u5_w2_d2.entities.Author;
-import antonioschettini.u5_w2_d2.exceptions.NotFoundException;
-import antonioschettini.u5_w2_d2.payloads.NewAuthorPayload;
+import antonioschettini.u5_w2_d3.entities.Author;
+import antonioschettini.u5_w2_d3.exceptions.NotFoundException;
+import antonioschettini.u5_w2_d3.payloads.NewAuthorPayload;
+import antonioschettini.u5_w2_d3.repositories.AuthorRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AuthorService {
-    private final List<Author> listaAutori = new ArrayList<>();
-    private int idCorrente = 1;
+    private final AuthorRepository authorRepository;
+
+    public AuthorService(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
+    }
 
 
     //post
@@ -22,30 +27,25 @@ public class AuthorService {
                 body.getEmail(),
                 body.getDataDiNascita()
         );
-        //assegno id con ++ ed avatar
-        nuovoAutore.setId(this.idCorrente);
-        this.idCorrente++;
 
         String urlAvatar = "https://ui-avatars.com/api/?name=" + body.getNome() + "+" + body.getCognome();
         nuovoAutore.setAvatar(urlAvatar);
 
         // salvo l'autore nella lista e lo ritorno
-        this.listaAutori.add(nuovoAutore);
-        return nuovoAutore;
+
+        return authorRepository.save(nuovoAutore);
     }
 
 
     //getbyid
     public Author trovaPerId(int id) {
-        return this.listaAutori.stream()
-                .filter(author -> author.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("Autore con id: " + id + " non è stato trovato"));
+        return authorRepository.findById(id).orElseThrow(() -> new NotFoundException("Autore con ID " + id + " non è stato trovato"));
     }
 
     //getall
-    public List<Author> trovatutti() {
-        return this.listaAutori;
+    public Page<Author> trovaTutti(int numeroPagina, int quantitàElementi, String ordinaPer) {
+        Pageable configurazionePaginazione = PageRequest.of(numeroPagina, quantitàElementi, Sort.by(ordinaPer));
+        return authorRepository.findAll(configurazionePaginazione);
     }
 
     //Put
@@ -60,12 +60,12 @@ public class AuthorService {
         String urlAvatar = "https://ui-avatars.com/api/?name=" + body.getNome() + "+" + body.getCognome();
         autoreTrovato.setAvatar(urlAvatar);
 
-        return autoreTrovato;
+        return authorRepository.save(autoreTrovato);
     }
 
     //delete
     public void cancellaAutore(int id) {
         Author autoreTrovato = this.trovaPerId(id);
-        this.listaAutori.remove(autoreTrovato);
+        authorRepository.delete(autoreTrovato);
     }
 }

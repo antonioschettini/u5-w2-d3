@@ -1,4 +1,4 @@
-package antonioschettini.u5_w2_d2.payloads;
+package antonioschettini.u5_w2_d3.payloads;
 
 import lombok.Data;
 
@@ -8,4 +8,5 @@ public class NewBlogPostPayload {
     private String titolo;
     private String contenuto;
     private int tempoDiLettura;
+    private int authorId; // il'id dell'autore che ha scritto il post
 }

@@ -1,12 +1,11 @@
-package antonioschettini.u5_w2_d2.controllers;
+package antonioschettini.u5_w2_d3.controllers;
 
-import antonioschettini.u5_w2_d2.entities.Author;
-import antonioschettini.u5_w2_d2.payloads.NewAuthorPayload;
-import antonioschettini.u5_w2_d2.services.AuthorService;
+import antonioschettini.u5_w2_d3.entities.Author;
+import antonioschettini.u5_w2_d3.payloads.NewAuthorPayload;
+import antonioschettini.u5_w2_d3.services.AuthorService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/authors")
@@ -26,8 +25,13 @@ public class AuthorController {
 
     //getall
     @GetMapping
-    public List<Author> ptendiTuttiGliAuturi() {
-        return this.authorService.trovatutti();
+    public Page<Author> prendiTuttiGliAutori(
+            // inserisco i valori di default
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+        return this.authorService.trovaTutti(page, size, sortBy);
     }
 
     //getbyid
