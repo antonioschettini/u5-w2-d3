@@ -41,8 +41,8 @@ public class BlogPostService {
     }
 
     //Getall
-    public Page<BlogPost> trovaTutti(int numeroPagina, int quantitàElementi, String ordinaPer) {
-        Pageable configurazionePaginazione = PageRequest.of(numeroPagina, quantitàElementi, Sort.by(ordinaPer));
+    public Page<BlogPost> trovaTutti(int numeroPagina, int quantitaElementi, String ordinaPer) {
+        Pageable configurazionePaginazione = PageRequest.of(numeroPagina, quantitaElementi, Sort.by(ordinaPer));
         return blogPostRepository.findAll(configurazionePaginazione);
     }
 
