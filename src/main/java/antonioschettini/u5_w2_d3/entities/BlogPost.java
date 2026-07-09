@@ -19,7 +19,7 @@ public class BlogPost {
     private String contenuto;
     private int tempoLettura;
 
-    @ManyToOne
+    @ManyToOne// per cancellare autore ed a cascata tutti i suoi posts.
     @JoinColumn(name = "author_id")
     private Author autore;
 

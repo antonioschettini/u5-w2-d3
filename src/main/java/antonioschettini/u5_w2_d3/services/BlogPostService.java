@@ -68,6 +68,7 @@ public class BlogPostService {
     public void cancellaBlogPost(int id) {
         BlogPost postTrovato = this.trovaPerId(id);
         // se esiste lo rimuoviamo dalla lista
+        System.out.println(postTrovato);
         blogPostRepository.delete(postTrovato);
     }
 
