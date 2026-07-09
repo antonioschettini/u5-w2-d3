@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,6 +33,12 @@ public class BlogPostController {
             throw new BadRequestException(errorList);
         }
         return this.blogPostService.salvaBlogPost(body);
+    }
+
+    //post per modifica cover
+    @PostMapping("/{id}/cover")
+    public String uploadCover(@PathVariable int id, @RequestParam("cover") MultipartFile file) {
+        return this.blogPostService.caricaCover(id, file);
     }
 
     //endpoint getall

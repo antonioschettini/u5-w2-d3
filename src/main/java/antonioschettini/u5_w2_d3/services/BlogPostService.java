@@ -2,23 +2,46 @@ package antonioschettini.u5_w2_d3.services;
 
 import antonioschettini.u5_w2_d3.entities.Author;
 import antonioschettini.u5_w2_d3.entities.BlogPost;
+import antonioschettini.u5_w2_d3.exceptions.BadRequestException;
 import antonioschettini.u5_w2_d3.exceptions.NotFoundException;
 import antonioschettini.u5_w2_d3.payloads.NewBlogPostPayload;
 import antonioschettini.u5_w2_d3.repositories.BlogPostRepository;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Map;
 
 @Service
 public class BlogPostService {
     private final BlogPostRepository blogPostRepository;
     private final AuthorService authorService;
+    private final Cloudinary cloudinary;
 
-    public BlogPostService(BlogPostRepository blogPostRepository, AuthorService authorService) {
+    public BlogPostService(BlogPostRepository blogPostRepository, AuthorService authorService, Cloudinary cloudinary) {
         this.blogPostRepository = blogPostRepository;
         this.authorService = authorService; // serve per cercare se l'autore esiste davvero
+        this.cloudinary = cloudinary;
+    }
+
+    //Nuovo metodo per caricare la copertina
+    public String caricaCover(int id, MultipartFile file) {
+        try {
+            Map mappaRisposta = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            String urlDellaFoto = (String) mappaRisposta.get("url");
+            BlogPost trovato = this.trovaPerId(id);
+            trovato.setCover(urlDellaFoto);
+            this.blogPostRepository.save(trovato);
+            return urlDellaFoto;
+        } catch (IOException ex) {
+            throw new BadRequestException("Errore durante il caricamento della copertina");
+        }
     }
 
     //Metodo per salvare un nuovo post

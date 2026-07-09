@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -31,6 +32,12 @@ public class AuthorController {
             throw new BadRequestException(errorList);
         }
         return this.authorService.salvaAutore(body);
+    }
+
+    //Post per update avatar
+    @PostMapping("/{id}/avatar")
+    public String uploadAvatar(@PathVariable int id, @RequestParam("avatar") MultipartFile file) {
+        return this.authorService.caricaAvatar(id, file);
     }
 
     //getall
