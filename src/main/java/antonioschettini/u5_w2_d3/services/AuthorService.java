@@ -22,13 +22,13 @@ public class AuthorService {
     //post
     public Author salvaAutore(NewAuthorPayload body) {
         Author nuovoAutore = new Author(
-                body.getNome(),
-                body.getCognome(),
-                body.getEmail(),
-                body.getDataDiNascita()
+                body.nome(),
+                body.cognome(),
+                body.email(),
+                body.dataDiNascita()
         );
 
-        String urlAvatar = "https://ui-avatars.com/api/?name=" + body.getNome() + "+" + body.getCognome();
+        String urlAvatar = "https://ui-avatars.com/api/?name=" + body.nome() + "+" + body.cognome();
         nuovoAutore.setAvatar(urlAvatar);
 
         // salvo l'autore nella lista e lo ritorno
@@ -51,13 +51,13 @@ public class AuthorService {
     //Put
     public Author modificaAutore(int id, NewAuthorPayload body) {
         Author autoreTrovato = trovaPerId(id);
-        autoreTrovato.setNome(body.getNome());
-        autoreTrovato.setCognome(body.getCognome());
-        autoreTrovato.setEmail(body.getEmail());
-        autoreTrovato.setDataDiNascita(body.getDataDiNascita());
+        autoreTrovato.setNome(body.nome());
+        autoreTrovato.setCognome(body.cognome());
+        autoreTrovato.setEmail(body.email());
+        autoreTrovato.setDataDiNascita(body.dataDiNascita());
 
         //cambio anche l'avatar con le nuove iniziali
-        String urlAvatar = "https://ui-avatars.com/api/?name=" + body.getNome() + "+" + body.getCognome();
+        String urlAvatar = "https://ui-avatars.com/api/?name=" + body.nome() + "+" + body.cognome();
         autoreTrovato.setAvatar(urlAvatar);
 
         return authorRepository.save(autoreTrovato);

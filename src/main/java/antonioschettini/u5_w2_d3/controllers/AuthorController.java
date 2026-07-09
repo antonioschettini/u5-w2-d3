@@ -1,11 +1,16 @@
 package antonioschettini.u5_w2_d3.controllers;
 
 import antonioschettini.u5_w2_d3.entities.Author;
+import antonioschettini.u5_w2_d3.exceptions.BadRequestException;
 import antonioschettini.u5_w2_d3.payloads.NewAuthorPayload;
 import antonioschettini.u5_w2_d3.services.AuthorService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/authors")
@@ -19,7 +24,12 @@ public class AuthorController {
     //post
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Author createAutore(@RequestBody NewAuthorPayload body) {
+    public Author createAutore(@RequestBody @Valid NewAuthorPayload body, BindingResult validation) {
+        if (validation.hasErrors()) {
+            List<String> errorList = validation.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getDefaultMessage()).toList();
+            throw new BadRequestException(errorList);
+        }
         return this.authorService.salvaAutore(body);
     }
 
@@ -42,7 +52,12 @@ public class AuthorController {
 
     //Put
     @PutMapping("{id}")
-    public Author aggiornaAutore(@PathVariable int id, @RequestBody NewAuthorPayload body) {
+    public Author aggiornaAutore(@PathVariable int id, @RequestBody @Valid NewAuthorPayload body, BindingResult validation) {
+        if (validation.hasErrors()) {
+            List<String> errorList = validation.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getDefaultMessage()).toList();
+            throw new BadRequestException(errorList);
+        }
         return this.authorService.modificaAutore(id, body);
     }
 

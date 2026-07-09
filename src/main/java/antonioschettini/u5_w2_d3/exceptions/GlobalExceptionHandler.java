@@ -14,19 +14,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorsPayload gestisciNotFound(NotFoundException ex) {
-        return new ErrorsPayload(ex.getMessage(), LocalDateTime.now(), 404);
+        return new ErrorsPayload(404, ex.getMessage(), LocalDateTime.now());
     }
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
     public ErrorsPayload handleBadRequest(BadRequestException ex) {
-        return new ErrorsPayload(ex.getMessage(), LocalDateTime.now(), 400);
+        return new ErrorsPayload(400, ex.getMessage(), LocalDateTime.now(), ex.getErrorsList());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorsPayload gestisciErroriGenerici(Exception ex) {
         ex.printStackTrace();
-        return new ErrorsPayload("Si è verificato un errore interno a be", LocalDateTime.now(), 500);
+        return new ErrorsPayload(500, "Si è verificato un errore interno a be", LocalDateTime.now());
     }
 }

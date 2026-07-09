@@ -25,12 +25,12 @@ public class BlogPostService {
     //Post
     public BlogPost salvaBlogPost(NewBlogPostPayload body) {
         //cerchiamo l'autore per verificare se esiste a db
-        Author autore = authorService.trovaPerId(body.getAuthorId());
+        Author autore = authorService.trovaPerId(body.authorId());
         BlogPost nuovoPost = new BlogPost(
-                body.getCategoria(),
-                body.getTitolo(),
-                body.getContenuto(),
-                body.getTempoDiLettura()
+                body.categoria(),
+                body.titolo(),
+                body.contenuto(),
+                body.tempoDiLettura()
         );
 
         //Setto l'url per la cover
@@ -54,12 +54,12 @@ public class BlogPostService {
     //Put
     public BlogPost modificaBlogPost(int id, NewBlogPostPayload body) {
         BlogPost postTrovato = this.trovaPerId(id);
-        Author nuovoAutore = authorService.trovaPerId(body.getAuthorId());
+        Author nuovoAutore = authorService.trovaPerId(body.authorId());
         // Setto il post recuperato con il medoto findy by id con il get dal payload/body
-        postTrovato.setCategoria(body.getCategoria());
-        postTrovato.setTitolo(body.getTitolo());
-        postTrovato.setContenuto(body.getContenuto());
-        postTrovato.setTempoLettura(body.getTempoDiLettura());
+        postTrovato.setCategoria(body.categoria());
+        postTrovato.setTitolo(body.titolo());
+        postTrovato.setContenuto(body.contenuto());
+        postTrovato.setTempoLettura(body.tempoDiLettura());
         postTrovato.setAutore(nuovoAutore);
         return blogPostRepository.save(postTrovato);
     }
@@ -67,8 +67,8 @@ public class BlogPostService {
     //Delete
     public void cancellaBlogPost(int id) {
         BlogPost postTrovato = this.trovaPerId(id);
-        // se esiste lo rimuoviamo dalla lista
-        System.out.println(postTrovato);
+//        // se esiste lo rimuoviamo dalla lista
+//        System.out.println(postTrovato);
         blogPostRepository.delete(postTrovato);
     }
 
